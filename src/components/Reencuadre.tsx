@@ -21,7 +21,7 @@ export function Reencuadre() {
       <div className="mx-auto max-w-4xl text-center">
         <Reveal>
           <p className="eyebrow justify-center text-marca-tinta/60">
-            El giro
+            Nuestra forma de trabajar
           </p>
         </Reveal>
 
@@ -36,9 +36,9 @@ export function Reencuadre() {
 
         <Reveal delay={0.18}>
           <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-marca-tinta/75">
-            En SIN FRONTERAS no te tratamos como un expediente más. Entendemos
-            cómo te sentiste — y te preparamos para que esta vez{" "}
-            <strong className="text-marca-tinta">sea diferente.</strong>
+            En SIN FRONTERAS no te tratamos como un expediente más. Conocemos lo
+            que se siente este proceso, y por eso preparamos tu caso con{" "}
+            <strong className="text-marca-tinta">coherencia y estrategia.</strong>
           </p>
         </Reveal>
 

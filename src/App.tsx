@@ -29,12 +29,12 @@ export default function App() {
       {/* Botón flotante → diagnóstico (embudo: pre-calificar antes de WhatsApp) */}
       <a
         href="#diagnostico"
-        aria-label="Hacer mi diagnóstico gratis"
+        aria-label="Hacer mi pre-calificación gratis"
         className="group fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-[#25D366] py-3 pl-3 pr-4 text-white shadow-xl shadow-black/30 transition hover:scale-105"
       >
         <MessageCircle className="h-7 w-7" />
         <span className="max-w-0 overflow-hidden whitespace-nowrap text-sm font-bold opacity-0 transition-all duration-300 group-hover:max-w-[140px] group-hover:opacity-100">
-          Diagnóstico gratis
+          Pre-calificación gratis
         </span>
       </a>
     </main>

@@ -48,7 +48,7 @@ export function Cierre() {
             className="mt-8 inline-flex min-h-[44px] items-center gap-2 rounded-full bg-marca-rojo px-9 py-4 text-base font-bold text-white shadow-xl shadow-marca-rojo/25 transition hover:scale-[1.03]"
           >
             <MessageCircle className="h-5 w-5" />
-            Hacer mi diagnóstico gratis
+            Hacer mi pre-calificación gratis
           </a>
         </Reveal>
 
@@ -89,7 +89,7 @@ export function Cierre() {
                 <span className="block text-xs uppercase tracking-wider text-marca-hueso/50">
                   Atendemos en
                 </span>
-                <span className="text-lg font-bold">Todo México</span>
+                <span className="text-lg font-bold">Toda Latinoamérica</span>
               </span>
             </div>
           </div>

@@ -85,8 +85,19 @@
 - Clear space = altura de la "S" a todos lados. Don't: recolorear fuera de paleta, estirar, poner sobre foto sin scrim, usar el PNG con fondo blanco sobre oscuro.
 
 ## 8. Voice tie-in
-- Tone en 3 palabras: empático, directo, experto.
-- Cómo se ve: primero nombra el miedo (te entiendo) y luego ofrece (te ayudo); jerarquía que respeta el orden emocional; un solo CTA primario por vista.
+- Tone en 3 palabras: cálido, experto, responsable.
+- **Posición de la PÁGINA (post-feedback Lupita):** acompañamiento experto de quien conoce el
+  sentimiento del trámite. Titular base: **"Tu visa, en manos de los expertos."** No acusa, no
+  garantiza. El ángulo emocional duro ("no fue tu culpa / te prepararon mal") vive en los ANUNCIOS,
+  no en la voz de la página.
+- **Copy responsable (guardrail):** NUNCA prometer/garantizar la visa ni "100% aprobados". Usar
+  "te preparamos", "aumentamos tus posibilidades", "te acompañamos", "coherencia en tu papeleo",
+  "se prepararon y lo lograron". Por si un caso no procede.
+- Servicios: visa de turista, estudiante y trabajo · EE.UU. y Canadá.
+- Alcance: **toda Latinoamérica** (no solo México). Prueba social real: clientes referidos por
+  familiares en EE.UU. (sin inventar cifras).
+- Embudo: pre-calificación gratis (filtro 1) → cita de análisis de pago $500 MXN/$20 USD acreditable
+  (filtro 2) → preparación. Cómo se ve: un solo CTA primario por vista ("Hacer mi pre-calificación").
 
 ## 9. Guardrails — nunca
 - Nunca negro puro `#000` — usar Tinta `#0A0E1A`.

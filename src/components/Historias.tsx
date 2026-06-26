@@ -51,6 +51,10 @@ export function Historias() {
               Personas reales que llegaron preparadas a su entrevista — varias
               después de una negativa previa. Mira cómo lo vivieron.
             </p>
+            <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--hairline)] bg-marca-tinta/40 px-4 py-2 text-sm text-marca-hueso/70">
+              <span className="text-base">🤝</span>
+              Muchos llegaron por recomendación de familiares en EE.UU.
+            </p>
 
             <div className="mt-8 flex items-center gap-4">
               <button

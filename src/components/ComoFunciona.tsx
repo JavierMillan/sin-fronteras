@@ -12,23 +12,23 @@ const PASOS = [
   {
     icon: ClipboardCheck,
     n: "01",
-    titulo: "Diagnóstico gratis",
+    titulo: "Pre-calificación gratis",
     texto:
-      "Respondes 5 preguntas y entendemos tu caso: si ya te negaron, para cuándo viajas y desde qué estado.",
+      "Respondes unas preguntas y entendemos tu caso: tipo de visa, si es tu primera vez o ya lo intentaste, y desde dónde nos escribes.",
   },
   {
     icon: CalendarCheck,
     n: "02",
-    titulo: "Cita + preparación",
+    titulo: "Cita de análisis de tu caso",
     texto:
-      "Te conseguimos cita real y te preparamos para la entrevista: montamos tu evidencia con coherencia para que tu historia se entienda bien.",
+      "Agendamos tu cita ($500 MXN / $20 USD, acreditable a tu trámite). Analizamos tu caso a fondo y armamos tu estrategia y evidencia con coherencia.",
   },
   {
     icon: PlaneTakeoff,
     n: "03",
-    titulo: "Llegas sólido",
+    titulo: "Te preparamos para tu entrevista",
     texto:
-      "Te acompañamos hasta el día de la entrevista. Llegas tranquilo, preparado y con todo en regla.",
+      "Te acompañamos hasta el día de tu cita en el consulado. Llegas preparado, con tu historia clara y todo en regla.",
   },
 ];
 

@@ -72,8 +72,8 @@ export function Navbar() {
           className="inline-flex items-center gap-1.5 rounded-full bg-marca-rojo px-4 py-2 text-sm font-bold text-white transition hover:scale-[1.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-hueso"
         >
           <MessageCircle className="h-4 w-4" />
-          <span className="hidden sm:inline">Diagnóstico gratis</span>
-          <span className="sm:hidden">Diagnóstico</span>
+          <span className="hidden sm:inline">Pre-calificación gratis</span>
+          <span className="sm:hidden">Pre-calificar</span>
         </a>
       </div>
     </motion.nav>

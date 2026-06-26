@@ -5,10 +5,11 @@ import { cn, construirLinkWhatsApp } from "@/lib/utils";
 import { Reveal } from "./Reveal";
 
 /**
- * FORMULARIO DE PRE-CALIFICACIÓN (corazón de la página).
- * Multi-paso, una pregunta a la vez, barra de progreso. Filtro medio.
- * SIN backend: al terminar arma un mensaje y abre WhatsApp (wa.me) con todos
- * los datos. El lead llega calificado a "Lupita".
+ * FORMULARIO DE PRE-CALIFICACIÓN ramificado (árbol). El conjunto de pasos se
+ * calcula según respuestas previas: tipo de visa → país → primera vez/negada →
+ * info básica → horario de preferencia. SIN backend: al terminar arma el
+ * mensaje y abre WhatsApp con todos los datos. La cita de análisis tiene costo
+ * (filtro de seriedad, acreditable al trámite) — se comunica antes de enviar.
  */
 
 type Opcion = { valor: string; etiqueta: string };
@@ -17,99 +18,137 @@ interface Paso {
   id: keyof Respuestas;
   pregunta: string;
   ayuda?: string;
-  tipo: "opciones" | "texto" | "tel";
+  tipo: "opciones" | "texto";
   opciones?: Opcion[];
   placeholder?: string;
 }
 
 interface Respuestas {
-  tramite: string;
-  cuando: string;
+  visa: string;
+  pais: string;
   historial: string;
+  cuando: string;
   personas: string;
-  estado: string;
+  pais_residencia: string;
   nombre: string;
+  horario: string;
 }
 
 const RESPUESTAS_INICIALES: Respuestas = {
-  tramite: "",
-  cuando: "",
+  visa: "",
+  pais: "",
   historial: "",
+  cuando: "",
   personas: "",
-  estado: "",
+  pais_residencia: "",
   nombre: "",
+  horario: "",
 };
 
-const PASOS: Paso[] = [
-  {
-    id: "tramite",
-    pregunta: "¿Qué necesitas tramitar?",
-    tipo: "opciones",
-    opciones: [
-      { valor: "Visa de turista EE.UU.", etiqueta: "Visa de turista · EE.UU." },
-      { valor: "Visa de turista Canadá", etiqueta: "Visa de turista · Canadá" },
-      { valor: "No estoy seguro", etiqueta: "Aún no estoy seguro" },
-    ],
-  },
-  {
-    id: "cuando",
-    pregunta: "¿Para cuándo planeas viajar?",
-    tipo: "opciones",
-    opciones: [
-      { valor: "En los próximos 3 meses", etiqueta: "En los próximos 3 meses" },
-      { valor: "En 3 a 6 meses", etiqueta: "En 3 a 6 meses" },
-      { valor: "En 6 a 12 meses", etiqueta: "En 6 a 12 meses" },
-      { valor: "Solo estoy explorando", etiqueta: "Solo estoy explorando" },
-    ],
-  },
-  {
-    id: "historial",
-    pregunta: "¿Has tramitado visa antes?",
-    ayuda: "Esto nos ayuda a saber cómo prepararte mejor. No hay respuesta mala.",
-    tipo: "opciones",
-    opciones: [
-      { valor: "Nunca he tramitado", etiqueta: "Nunca he tramitado" },
-      { valor: "La tuve y venció", etiqueta: "La tuve y ya venció" },
-      { valor: "Me la negaron", etiqueta: "Me la negaron una vez" },
-      { valor: "La tengo vigente", etiqueta: "La tengo vigente" },
-    ],
-  },
-  {
-    id: "personas",
-    pregunta: "¿Cuántas personas viajan?",
-    tipo: "opciones",
-    opciones: [
-      { valor: "Solo yo", etiqueta: "Solo yo" },
-      { valor: "2 personas", etiqueta: "2 personas" },
-      { valor: "3 a 4 personas", etiqueta: "3 a 4 personas" },
-      { valor: "5 o más", etiqueta: "5 o más" },
-    ],
-  },
-  {
-    id: "estado",
-    pregunta: "¿Desde qué estado nos escribes?",
-    ayuda: "Atendemos en todo México, presencial y a distancia.",
-    tipo: "texto",
-    placeholder: "Ej. Michoacán, Jalisco, CDMX…",
-  },
-  {
-    id: "nombre",
-    pregunta: "¿A nombre de quién preparamos el diagnóstico?",
-    ayuda: "Es el último paso. Al enviar se abre WhatsApp con tus respuestas listas.",
-    tipo: "texto",
-    placeholder: "Tu nombre completo",
-  },
-];
+/**
+ * Construye la secuencia de pasos según las respuestas ya dadas (árbol).
+ * Esto permite ramificar: el historial solo se pregunta para turista, etc.
+ */
+function construirPasos(r: Respuestas): Paso[] {
+  const pasos: Paso[] = [
+    {
+      id: "visa",
+      pregunta: "¿Qué tipo de visa necesitas?",
+      tipo: "opciones",
+      opciones: [
+        { valor: "Turista", etiqueta: "Visa de turista" },
+        { valor: "Estudiante", etiqueta: "Visa de estudiante" },
+        { valor: "Trabajo", etiqueta: "Visa de trabajo" },
+        { valor: "No estoy seguro", etiqueta: "Aún no estoy seguro" },
+      ],
+    },
+    {
+      id: "pais",
+      pregunta: "¿A qué país quieres viajar?",
+      tipo: "opciones",
+      opciones: [
+        { valor: "Estados Unidos", etiqueta: "Estados Unidos" },
+        { valor: "Canadá", etiqueta: "Canadá" },
+        { valor: "Ambos", etiqueta: "Ambos / no lo decido aún" },
+      ],
+    },
+    {
+      id: "historial",
+      pregunta: "¿Es tu primera vez tramitando esta visa?",
+      ayuda: "Esto nos ayuda a saber cómo prepararte mejor. No hay respuesta mala.",
+      tipo: "opciones",
+      opciones: [
+        { valor: "Primera vez", etiqueta: "Sí, es mi primera vez" },
+        { valor: "Me la negaron", etiqueta: "Ya lo intenté y me la negaron" },
+        { valor: "La tuve y venció", etiqueta: "La tuve y ya venció" },
+        { valor: "La tengo vigente", etiqueta: "La tengo vigente" },
+      ],
+    },
+    {
+      id: "cuando",
+      pregunta: "¿Para cuándo planeas viajar?",
+      tipo: "opciones",
+      opciones: [
+        { valor: "En los próximos 3 meses", etiqueta: "En los próximos 3 meses" },
+        { valor: "En 3 a 6 meses", etiqueta: "En 3 a 6 meses" },
+        { valor: "En 6 a 12 meses", etiqueta: "En 6 a 12 meses" },
+        { valor: "Solo estoy explorando", etiqueta: "Solo estoy explorando" },
+      ],
+    },
+    {
+      id: "personas",
+      pregunta: "¿Cuántas personas tramitan?",
+      tipo: "opciones",
+      opciones: [
+        { valor: "Solo yo", etiqueta: "Solo yo" },
+        { valor: "2 personas", etiqueta: "2 personas" },
+        { valor: "3 a 4 personas", etiqueta: "3 a 4 personas" },
+        { valor: "5 o más", etiqueta: "5 o más" },
+      ],
+    },
+    {
+      id: "pais_residencia",
+      pregunta: "¿Desde qué país y ciudad nos escribes?",
+      ayuda: "Atendemos toda Latinoamérica, presencial y a distancia.",
+      tipo: "texto",
+      placeholder: "Ej. México, Guadalajara · Colombia, Bogotá…",
+    },
+    {
+      id: "nombre",
+      pregunta: "¿A nombre de quién preparamos el análisis?",
+      tipo: "texto",
+      placeholder: "Tu nombre completo",
+    },
+    {
+      id: "horario",
+      pregunta: "¿Qué horario te queda mejor para tu cita?",
+      ayuda: "Coordinamos la cita por WhatsApp en el horario que prefieras.",
+      tipo: "opciones",
+      opciones: [
+        { valor: "Mañana", etiqueta: "Por la mañana" },
+        { valor: "Tarde", etiqueta: "Por la tarde" },
+        { valor: "Cualquier horario", etiqueta: "Cualquier horario me sirve" },
+      ],
+    },
+  ];
+
+  // Ramificación: si "no estoy seguro" del tipo, saltar el historial específico.
+  if (r.visa === "No estoy seguro") {
+    return pasos.filter((p) => p.id !== "historial");
+  }
+  return pasos;
+}
 
 export function FormularioPrecalificacion() {
-  const [paso, setPaso] = useState(0);
+  const [indice, setIndice] = useState(0);
   const [respuestas, setRespuestas] = useState<Respuestas>(RESPUESTAS_INICIALES);
   const [enviado, setEnviado] = useState(false);
 
-  const actual = PASOS[paso];
+  const pasos = useMemo(() => construirPasos(respuestas), [respuestas]);
+  const actual = pasos[Math.min(indice, pasos.length - 1)];
   const valorActual = respuestas[actual.id];
-  const esUltimo = paso === PASOS.length - 1;
-  const progreso = ((paso + (valorActual ? 1 : 0)) / PASOS.length) * 100;
+  const esUltimo = indice === pasos.length - 1;
+  const progreso = ((indice + (valorActual ? 1 : 0)) / pasos.length) * 100;
 
   const valido = useMemo(
     () => valorActual.trim().length > 0,
@@ -121,28 +160,29 @@ export function FormularioPrecalificacion() {
 
   const avanzar = () => {
     if (!valido) return;
-    if (esUltimo) {
-      finalizar();
-    } else {
-      setPaso((p) => p + 1);
-    }
+    if (esUltimo) finalizar();
+    else setIndice((i) => i + 1);
   };
 
-  const retroceder = () => setPaso((p) => Math.max(0, p - 1));
+  const retroceder = () => setIndice((i) => Math.max(0, i - 1));
 
   const finalizar = () => {
+    const r = respuestas;
     const mensaje = [
-      "¡Hola SIN FRONTERAS! Hice mi pre-calificación en la página:",
+      "¡Hola SIN FRONTERAS! Hice mi pre-calificación en la página y quiero agendar mi cita de análisis:",
       "",
-      `• Nombre: ${respuestas.nombre}`,
-      `• Trámite: ${respuestas.tramite}`,
-      `• Viajo: ${respuestas.cuando}`,
-      `• Historial de visa: ${respuestas.historial}`,
-      `• Personas: ${respuestas.personas}`,
-      `• Estado: ${respuestas.estado}`,
+      `• Nombre: ${r.nombre}`,
+      `• Visa: ${r.visa}${r.pais ? ` (${r.pais})` : ""}`,
+      r.historial ? `• Historial: ${r.historial}` : null,
+      `• Viajo: ${r.cuando}`,
+      `• Personas: ${r.personas}`,
+      `• Desde: ${r.pais_residencia}`,
+      `• Horario preferido: ${r.horario}`,
       "",
-      "Quiero saber si me aprobarían y cómo me preparan para la entrevista.",
-    ].join("\n");
+      "Entiendo que la cita de análisis tiene un costo y quiero agendarla.",
+    ]
+      .filter(Boolean)
+      .join("\n");
 
     setEnviado(true);
     window.open(construirLinkWhatsApp(mensaje), "_blank", "noopener");
@@ -157,14 +197,14 @@ export function FormularioPrecalificacion() {
         <Reveal>
           <div className="flex flex-col items-center text-center">
             <p className="eyebrow justify-center text-marca-rojo">
-              Diagnóstico gratis · 2 minutos
+              Pre-calificación · 2 minutos
             </p>
             <h2 className="mt-4 font-display text-3xl font-extrabold uppercase leading-tight text-marca-hueso md:text-4xl">
               Descubre si esta vez te aprobarían
             </h2>
             <p className="mt-3 max-w-md font-hand text-xl text-marca-hueso/70">
-              Cuéntanos tu caso. Sin juzgar, sin compromiso — solo para saber
-              cómo ayudarte mejor.
+              Cuéntanos tu caso. Sin juzgar — solo para saber cómo prepararte
+              mejor.
             </p>
           </div>
         </Reveal>
@@ -177,9 +217,9 @@ export function FormularioPrecalificacion() {
                 <div className="mb-8">
                   <div className="mb-2 flex justify-between text-xs font-medium text-marca-hueso/60">
                     <span>
-                      Paso {paso + 1} de {PASOS.length}
+                      Paso {indice + 1} de {pasos.length}
                     </span>
-                    <span>{Math.round(progreso)}%</span>
+                    <span className="tabular">{Math.round(progreso)}%</span>
                   </div>
                   <div className="h-2 w-full overflow-hidden rounded-full bg-marca-hueso/10">
                     <motion.div
@@ -217,7 +257,7 @@ export function FormularioPrecalificacion() {
                               key={op.valor}
                               onClick={() => setValor(op.valor)}
                               className={cn(
-                                "flex items-center justify-between rounded-xl border px-5 py-4 text-left text-base font-medium transition",
+                                "flex min-h-[44px] items-center justify-between rounded-xl border px-5 py-4 text-left text-base font-medium transition",
                                 sel
                                   ? "border-marca-rojo bg-marca-rojo/10 text-marca-hueso"
                                   : "border-marca-hueso/15 text-marca-hueso/80 hover:border-marca-hueso/40 hover:bg-marca-hueso/5"
@@ -241,8 +281,7 @@ export function FormularioPrecalificacion() {
                     ) : (
                       <input
                         autoFocus
-                        type={actual.tipo === "tel" ? "tel" : "text"}
-                        inputMode={actual.tipo === "tel" ? "numeric" : "text"}
+                        type="text"
                         value={valorActual}
                         onChange={(e) => setValor(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && avanzar()}
@@ -253,11 +292,21 @@ export function FormularioPrecalificacion() {
                   </motion.div>
                 </AnimatePresence>
 
+                {/* Nota de cita de pago — visible en el último paso */}
+                {esUltimo && (
+                  <p className="mt-6 rounded-xl border border-marca-hueso/10 bg-marca-tinta/60 px-4 py-3 text-sm text-marca-hueso/70">
+                    La <strong className="text-marca-hueso">cita de análisis</strong>{" "}
+                    tiene un costo de <strong className="text-marca-hueso">$500 MXN / $20 USD</strong>,{" "}
+                    <strong className="text-marca-hueso">acreditable a tu trámite</strong> si
+                    decides continuar. Así dedicamos tiempo real a tu caso.
+                  </p>
+                )}
+
                 {/* Navegación */}
                 <div className="mt-8 flex items-center justify-between gap-4">
                   <button
                     onClick={retroceder}
-                    disabled={paso === 0}
+                    disabled={indice === 0}
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-marca-hueso/60 transition hover:text-marca-hueso disabled:invisible"
                   >
                     <ArrowLeft className="h-4 w-4" />
@@ -267,7 +316,7 @@ export function FormularioPrecalificacion() {
                     onClick={avanzar}
                     disabled={!valido}
                     className={cn(
-                      "inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-base font-bold transition",
+                      "inline-flex min-h-[44px] items-center gap-2 rounded-full px-7 py-3.5 text-base font-bold transition",
                       valido
                         ? esUltimo
                           ? "bg-[#25D366] text-white hover:scale-[1.03]"
@@ -278,7 +327,7 @@ export function FormularioPrecalificacion() {
                     {esUltimo ? (
                       <>
                         <MessageCircle className="h-5 w-5" />
-                        Enviar por WhatsApp
+                        Agendar mi cita
                       </>
                     ) : (
                       <>
@@ -300,8 +349,8 @@ export function FormularioPrecalificacion() {
                 </h3>
                 <p className="mx-auto mt-3 max-w-sm text-marca-hueso/75">
                   Se abrió WhatsApp con tus datos. Solo presiona{" "}
-                  <strong className="text-marca-hueso">enviar</strong> y te
-                  respondemos hoy mismo con tu diagnóstico.
+                  <strong className="text-marca-hueso">enviar</strong> y
+                  coordinamos tu cita de análisis.
                 </p>
                 <button
                   onClick={finalizar}

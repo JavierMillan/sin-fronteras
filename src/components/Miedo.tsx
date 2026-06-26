@@ -59,11 +59,11 @@ export function Miedo() {
         <Reveal delay={0.15}>
           <div className="mt-20 max-w-4xl">
             <p className="text-lg font-medium uppercase tracking-wide text-marca-hueso/50">
-              No estás solo — y no es que “no califiques”.
+              No tienes que resolverlo solo.
             </p>
             <p className="-ml-1 mt-3 font-display text-[clamp(2rem,5.5vw,3.75rem)] font-extrabold uppercase leading-[0.95] text-marca-hueso">
-              El problema casi siempre es{" "}
-              <span className="text-marca-rojo">cómo te prepararon.</span>
+              Te acompañamos con{" "}
+              <span className="text-marca-rojo">expertos que sí saben preparar tu caso.</span>
             </p>
           </div>
         </Reveal>

@@ -50,7 +50,7 @@ export function Hero() {
       >
         <span className="flex origin-center -rotate-90 items-center gap-3 whitespace-nowrap text-xs font-semibold uppercase tracking-[0.35em] text-marca-hueso/55">
           <span className="h-px w-12 bg-marca-rojo" />
-          ¿Ya te negaron la visa?
+          Turista · Estudiante · Trabajo
         </span>
       </motion.div>
 
@@ -64,7 +64,7 @@ export function Hero() {
           className="mb-6 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-marca-hueso/70 lg:hidden"
         >
           <span className="h-px w-8 bg-marca-rojo" />
-          ¿Ya te negaron la visa?
+          Turista · Estudiante · Trabajo
         </motion.div>
 
         {/* Titular — escala brutal, sangra a la izquierda fuera del margen */}
@@ -72,10 +72,10 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="-ml-1 max-w-[14ch] font-display text-[clamp(3.25rem,11vw,9rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.03em] text-marca-hueso [overflow-wrap:break-word] md:-ml-2"
+          className="-ml-1 max-w-[15ch] font-display text-[clamp(3rem,10vw,8rem)] font-extrabold uppercase leading-[0.84] tracking-[-0.03em] text-marca-hueso [overflow-wrap:break-word] md:-ml-2"
         >
-          No fue tu culpa.{" "}
-          <span className="text-marca-azul-claro">Te prepararon mal.</span>
+          Tu visa, en manos{" "}
+          <span className="text-marca-azul-claro">de los expertos.</span>
         </motion.h1>
 
         {/* Bloque de apoyo — desplazado a la izquierda, ancho contenido (tensión asimétrica) */}
@@ -91,9 +91,9 @@ export function Hero() {
               entienda bien.
             </p>
             <p className="mt-4 text-base leading-relaxed text-marca-hueso/70">
-              Descubre <strong className="text-marca-hueso">gratis y en 2 minutos</strong>{" "}
-              si esta vez te aprobarían — y cómo te preparamos para llegar sólido
-              a tu entrevista.
+              Te acompañamos en visas de turista, estudiante y trabajo para
+              EE.UU. y Canadá — con la preparación y la coherencia que tu caso
+              necesita. <strong className="text-marca-hueso">Pre-califica gratis en 2 minutos.</strong>
             </p>
 
             <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
@@ -102,10 +102,10 @@ export function Hero() {
                 className="group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-marca-rojo px-8 py-4 text-base font-bold text-white shadow-xl shadow-marca-rojo/25 transition hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-hueso"
               >
                 <MessageCircle className="h-5 w-5" />
-                Hacer mi diagnóstico
+                Hacer mi pre-calificación
               </a>
               <span className="text-sm text-marca-hueso/55">
-                Sin compromiso · respuesta el mismo día
+                Gratis · sin compromiso
               </span>
             </div>
           </motion.div>
@@ -123,6 +123,15 @@ export function Hero() {
               valor={<Contador valor={10} prefijo="+" sufijo="K" />}
               etiqueta="trámites realizados"
             />
+            <span className="mb-1 hidden h-10 w-px bg-marca-hueso/15 sm:block" />
+            <div className="hidden min-w-0 sm:block">
+              <dt className="font-display text-3xl font-extrabold leading-none text-marca-hueso md:text-4xl">
+                LatAm
+              </dt>
+              <dd className="mt-1.5 max-w-[12ch] text-[0.7rem] leading-tight text-marca-hueso/55">
+                atendemos toda Latinoamérica
+              </dd>
+            </div>
           </motion.dl>
         </div>
       </div>
