@@ -54,8 +54,8 @@ export function Hero() {
         </span>
       </motion.div>
 
-      {/* ───────── Contenido anclado al TERCIO INFERIOR-IZQUIERDO ───────── */}
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-6 pb-20 pt-32 md:px-10 md:pb-24">
+      {/* ───────── Contenido centrado-alto (evita el aire muerto arriba) ───────── */}
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center px-6 pb-16 pt-28 md:px-10">
         {/* Eyebrow horizontal solo en móvil/tablet (el rotado es desktop) */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -86,14 +86,11 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.35 }}
             className="md:col-span-6 lg:col-span-5"
           >
-            <p className="font-hand text-2xl leading-snug text-marca-hueso/85">
-              No se trata solo de papeles. Se trata de que tu historia se
-              entienda bien.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-marca-hueso/70">
-              Te acompañamos en visas de turista, estudiante y trabajo para
-              EE.UU. y Canadá — con la preparación y la coherencia que tu caso
-              necesita. <strong className="text-marca-hueso">Pre-califica gratis en 2 minutos.</strong>
+            <p className="text-base leading-relaxed text-marca-hueso/70">
+              Tramitar una visa da nervios, y más si te la jugaste una vez y no
+              salió. Aquí no te soltamos la mano: te preparamos para tu
+              entrevista de turista, estudiante o trabajo — EE.UU. y Canadá.{" "}
+              <strong className="text-marca-hueso">Cuéntanos tu caso en 2 minutos, es gratis.</strong>
             </p>
 
             <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:items-center">

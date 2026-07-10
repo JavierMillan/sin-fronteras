@@ -4,8 +4,9 @@ import { MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ENLACES = [
+  { href: "#faq", label: "Dudas" },
   { href: "#historias", label: "Historias" },
-  { href: "#proceso", label: "Cómo funciona" },
+  { href: "#acompanamiento", label: "Acompañamiento" },
 ];
 
 /**

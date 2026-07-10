@@ -48,8 +48,8 @@ export function Historias() {
               <span className="block text-marca-azul-claro">de sus historias.</span>
             </h2>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-marca-hueso/75">
-              Personas reales que llegaron preparadas a su entrevista — varias
-              después de una negativa previa. Mira cómo lo vivieron.
+              Gente como tú, que también tenía miedo de que le dijeran que no.
+              A varios ya les habían negado la visa antes. Mira cómo les fue.
             </p>
             <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--hairline)] bg-marca-tinta/40 px-4 py-2 text-sm text-marca-hueso/70">
               <span className="text-base">🤝</span>

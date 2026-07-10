@@ -1,8 +1,9 @@
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
-import { Miedo } from "./components/Miedo";
+import { FAQ } from "./components/FAQ";
 import { Reencuadre } from "./components/Reencuadre";
 import { Historias } from "./components/Historias";
+import { Acompanamiento } from "./components/Acompanamiento";
 import { ComoFunciona } from "./components/ComoFunciona";
 import { FormularioPrecalificacion } from "./components/FormularioPrecalificacion";
 import { Cierre } from "./components/Cierre";
@@ -10,18 +11,19 @@ import { MessageCircle } from "lucide-react";
 
 /**
  * Landing one-page de pre-calificación SIN FRONTERAS.
- * Recorrido: Identificación → Miedo → Reencuadre → Historias → Cómo funciona →
- * Pre-calificación → Cierre. El botón flotante lleva al formulario (no a
- * WhatsApp en frío): primero pre-califica, luego WhatsApp con datos.
+ * Recorrido: Hero → FAQ (dudas) → Reencuadre → Historias → Acompañamiento →
+ * Cómo funciona → Pre-calificación → Cierre. El botón flotante lleva al
+ * formulario (no a WhatsApp en frío): primero pre-califica, luego WhatsApp.
  */
 export default function App() {
   return (
     <main className="overflow-x-clip">
       <Navbar />
       <Hero />
-      <Miedo />
+      <FAQ />
       <Reencuadre />
       <Historias />
+      <Acompanamiento />
       <ComoFunciona />
       <FormularioPrecalificacion />
       <Cierre />
@@ -34,7 +36,7 @@ export default function App() {
       >
         <MessageCircle className="h-7 w-7" />
         <span className="max-w-0 overflow-hidden whitespace-nowrap text-sm font-bold opacity-0 transition-all duration-300 group-hover:max-w-[140px] group-hover:opacity-100">
-          Pre-calificación gratis
+          Pre-calificación
         </span>
       </a>
     </main>

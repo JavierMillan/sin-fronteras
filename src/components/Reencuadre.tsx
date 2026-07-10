@@ -10,9 +10,9 @@ import { Reveal } from "./Reveal";
  */
 
 const PILARES = [
-  { titulo: "Cita real", detalle: "Te conseguimos la cita, no excusas." },
-  { titulo: "Estrategia personalizada", detalle: "Tu caso es único; tu preparación también." },
-  { titulo: "Preparación para tu entrevista", detalle: "Llegas sabiendo qué va a pasar." },
+  { titulo: "Te conseguimos la cita", detalle: "Nada de 'no hay lugar'. Buscamos tu cita y la agendamos por ti." },
+  { titulo: "Armamos tu caso contigo", detalle: "Revisamos tu historia y tus papeles para que todo cuadre y tenga sentido." },
+  { titulo: "Ensayamos tu entrevista", detalle: "Practicas antes con nosotros, para que el día real llegues sin sorpresas." },
 ];
 
 export function Reencuadre() {
@@ -36,9 +36,10 @@ export function Reencuadre() {
 
         <Reveal delay={0.18}>
           <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-marca-tinta/75">
-            En SIN FRONTERAS no te tratamos como un expediente más. Conocemos lo
-            que se siente este proceso, y por eso preparamos tu caso con{" "}
-            <strong className="text-marca-tinta">coherencia y estrategia.</strong>
+            Aquí no eres un folio más en una fila. Nos sentamos contigo, revisamos
+            tu caso como si fuera el nuestro, y no te mandamos a la entrevista
+            hasta que estés{" "}
+            <strong className="text-marca-tinta">listo de verdad.</strong>
           </p>
         </Reveal>
 

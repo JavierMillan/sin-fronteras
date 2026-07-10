@@ -29,6 +29,7 @@ interface Respuestas {
   historial: string;
   cuando: string;
   personas: string;
+  acompanamiento: string;
   pais_residencia: string;
   nombre: string;
   horario: string;
@@ -40,6 +41,7 @@ const RESPUESTAS_INICIALES: Respuestas = {
   historial: "",
   cuando: "",
   personas: "",
+  acompanamiento: "",
   pais_residencia: "",
   nombre: "",
   horario: "",
@@ -107,6 +109,17 @@ function construirPasos(r: Respuestas): Paso[] {
       ],
     },
     {
+      id: "acompanamiento",
+      pregunta: "¿Necesitas acompañamiento presencial a tu cita?",
+      ayuda: "Podemos ir contigo en persona, aunque no tengas quién te acompañe. Ideal para adultos mayores.",
+      tipo: "opciones",
+      opciones: [
+        { valor: "Sí, me gustaría", etiqueta: "Sí, me gustaría" },
+        { valor: "Tal vez", etiqueta: "Tal vez, cuéntenme más" },
+        { valor: "No lo necesito", etiqueta: "No lo necesito" },
+      ],
+    },
+    {
       id: "pais_residencia",
       pregunta: "¿Desde qué país y ciudad nos escribes?",
       ayuda: "Atendemos toda Latinoamérica, presencial y a distancia.",
@@ -115,14 +128,14 @@ function construirPasos(r: Respuestas): Paso[] {
     },
     {
       id: "nombre",
-      pregunta: "¿A nombre de quién preparamos el análisis?",
+      pregunta: "¿A nombre de quién preparamos la valoración?",
       tipo: "texto",
       placeholder: "Tu nombre completo",
     },
     {
       id: "horario",
-      pregunta: "¿Qué horario te queda mejor para tu cita?",
-      ayuda: "Coordinamos la cita por WhatsApp en el horario que prefieras.",
+      pregunta: "¿Qué horario te queda mejor para tu valoración?",
+      ayuda: "Un experto se coordinará contigo por WhatsApp.",
       tipo: "opciones",
       opciones: [
         { valor: "Mañana", etiqueta: "Por la mañana" },
@@ -169,17 +182,18 @@ export function FormularioPrecalificacion() {
   const finalizar = () => {
     const r = respuestas;
     const mensaje = [
-      "¡Hola SIN FRONTERAS! Hice mi pre-calificación en la página y quiero agendar mi cita de análisis:",
+      "¡Hola SIN FRONTERAS! Hice mi pre-calificación en la página y quiero agendar mi cita de valoración:",
       "",
       `• Nombre: ${r.nombre}`,
       `• Visa: ${r.visa}${r.pais ? ` (${r.pais})` : ""}`,
       r.historial ? `• Historial: ${r.historial}` : null,
       `• Viajo: ${r.cuando}`,
       `• Personas: ${r.personas}`,
+      `• Acompañamiento presencial: ${r.acompanamiento}`,
       `• Desde: ${r.pais_residencia}`,
       `• Horario preferido: ${r.horario}`,
       "",
-      "Entiendo que la cita de análisis tiene un costo y quiero agendarla.",
+      "Entiendo que la cita de valoración tiene un costo y quiero agendarla.",
     ]
       .filter(Boolean)
       .join("\n");
@@ -200,11 +214,10 @@ export function FormularioPrecalificacion() {
               Pre-calificación · 2 minutos
             </p>
             <h2 className="mt-4 font-display text-3xl font-extrabold uppercase leading-tight text-marca-hueso md:text-4xl">
-              Descubre si esta vez te aprobarían
+              Cuéntanos tu historia
             </h2>
-            <p className="mt-3 max-w-md font-hand text-xl text-marca-hueso/70">
-              Cuéntanos tu caso. Sin juzgar — solo para saber cómo prepararte
-              mejor.
+            <p className="mt-3 max-w-md text-lg text-marca-hueso/70">
+              para saber cómo prepararte mejor.
             </p>
           </div>
         </Reveal>
@@ -295,7 +308,7 @@ export function FormularioPrecalificacion() {
                 {/* Nota de cita de pago — visible en el último paso */}
                 {esUltimo && (
                   <p className="mt-6 rounded-xl border border-marca-hueso/10 bg-marca-tinta/60 px-4 py-3 text-sm text-marca-hueso/70">
-                    La <strong className="text-marca-hueso">cita de análisis</strong>{" "}
+                    La <strong className="text-marca-hueso">cita de valoración</strong>{" "}
                     tiene un costo de <strong className="text-marca-hueso">$500 MXN / $20 USD</strong>,{" "}
                     <strong className="text-marca-hueso">acreditable a tu trámite</strong> si
                     decides continuar. Así dedicamos tiempo real a tu caso.
@@ -327,7 +340,7 @@ export function FormularioPrecalificacion() {
                     {esUltimo ? (
                       <>
                         <MessageCircle className="h-5 w-5" />
-                        Agendar mi cita
+                        Agendar mi cita de valoración
                       </>
                     ) : (
                       <>
@@ -350,7 +363,7 @@ export function FormularioPrecalificacion() {
                 <p className="mx-auto mt-3 max-w-sm text-marca-hueso/75">
                   Se abrió WhatsApp con tus datos. Solo presiona{" "}
                   <strong className="text-marca-hueso">enviar</strong> y
-                  coordinamos tu cita de análisis.
+                  coordinamos tu cita de valoración.
                 </p>
                 <button
                   onClick={finalizar}

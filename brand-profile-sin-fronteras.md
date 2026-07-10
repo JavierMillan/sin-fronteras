@@ -96,8 +96,20 @@
 - Servicios: visa de turista, estudiante y trabajo · EE.UU. y Canadá.
 - Alcance: **toda Latinoamérica** (no solo México). Prueba social real: clientes referidos por
   familiares en EE.UU. (sin inventar cifras).
-- Embudo: pre-calificación gratis (filtro 1) → cita de análisis de pago $500 MXN/$20 USD acreditable
+- Embudo: pre-calificación gratis (filtro 1) → cita de VALORACIÓN de pago $500 MXN/$20 USD acreditable
   (filtro 2) → preparación. Cómo se ve: un solo CTA primario por vista ("Hacer mi pre-calificación").
+- **Diferenciador real (entrevista simulada):** la base del éxito es la preparación previa — entrevista
+  simulada donde se evalúan respuestas y lenguaje corporal, se dan tips de qué/cómo contestar y qué
+  documentos llevar. Comunicar esto en "Cómo funciona".
+- **Acompañamiento presencial (alma de la marca):** el equipo acompaña EN PERSONA a la cita, aunque la
+  persona no tenga quién la acompañe. Énfasis en adultos mayores (tranquilidad para la familia). Voz
+  "nuestro equipo" (no nombrar a Lupita). Es un servicio y un valor emocional, no un extra menor.
+- **Honorarios (anclaje de valor):** hay quien paga hasta $100,000 por cruzar de otras formas; aquí el
+  acompañamiento cuesta **$2,500–$7,000 según el trámite** (rango real de Lupita). Se comunica en el FAQ
+  como anclaje, no como lista de precios fría. Presupuesto exacto se da en la valoración.
+- **FAQ empático:** las dudas reales del avatar en acordeón, tono honesto experto. Guardrail crítico:
+  nunca garantizar la aprobación ("ningún gestor serio puede garantizar... lo que sí hacemos es
+  prepararte para maximizar tus posibilidades").
 
 ## 9. Guardrails — nunca
 - Nunca negro puro `#000` — usar Tinta `#0A0E1A`.

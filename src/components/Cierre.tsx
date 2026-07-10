@@ -40,7 +40,9 @@ export function Cierre() {
             <span className="text-marca-azul-claro">tus sueños.</span>
           </h2>
           <p className="mt-6 max-w-md text-lg text-marca-hueso/75">
-            Llega sólido a tu entrevista, con quien sí sabe prepararte.
+            Ese viaje que llevas años posponiendo, esa familia que quieres
+            volver a ver — empieza con un primer paso. Y no tienes que darlo
+            solo.
           </p>
 
           <a

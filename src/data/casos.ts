@@ -20,7 +20,7 @@ export const TESTIMONIOS: Testimonio[] = [
     nombre: "María G.",
     lugar: "Michoacán",
     resultado: "Aprobada · tras una negativa previa",
-    cita: "Ya me la habían negado. Esta vez llegué preparada y supe qué iba a pasar.",
+    cita: "La primera vez fui sola y me la negaron. Esta vez llegué sabiendo qué me iban a preguntar.",
     video: "/testimonios/testimonio-1.mp4",
     poster: "/testimonios/poster-1.jpg",
   },

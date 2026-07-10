@@ -12,23 +12,28 @@ const PASOS = [
   {
     icon: ClipboardCheck,
     n: "01",
-    titulo: "Pre-calificación gratis",
+    titulo: "Nos cuentas tu caso",
     texto:
-      "Respondes unas preguntas y entendemos tu caso: tipo de visa, si es tu primera vez o ya lo intentaste, y desde dónde nos escribes.",
+      "Respondes unas preguntas rápidas: qué visa quieres, si es tu primera vez o ya lo intentaste, y desde dónde nos escribes. Sin costo, sin compromiso.",
   },
   {
     icon: CalendarCheck,
     n: "02",
-    titulo: "Cita de análisis de tu caso",
+    titulo: "Nos sentamos a valorar tu caso",
     texto:
-      "Agendamos tu cita ($500 MXN / $20 USD, acreditable a tu trámite). Analizamos tu caso a fondo y armamos tu estrategia y evidencia con coherencia.",
+      "En tu cita de valoración ($500 MXN / $20 USD, que se te descuenta si continúas) vemos tu caso a fondo y armamos, contigo, la mejor forma de contar tu historia.",
   },
   {
     icon: PlaneTakeoff,
     n: "03",
-    titulo: "Te preparamos para tu entrevista",
+    titulo: "Ensayamos tu entrevista, de verdad",
     texto:
-      "Te acompañamos hasta el día de tu cita en el consulado. Llegas preparado, con tu historia clara y todo en regla.",
+      "Esta es la parte que marca la diferencia: hacemos una entrevista de práctica antes de la real. Para que ese día no te agarre nada por sorpresa.",
+    bullets: [
+      "Vemos cómo respondes y hasta cómo te mueves",
+      "Te decimos qué contestar y qué no",
+      "Te decimos exactamente qué papeles llevar",
+    ],
   },
 ];
 
@@ -87,13 +92,26 @@ export function ComoFunciona() {
                     <span className="flex h-12 w-12 flex-none items-center justify-center rounded-xl bg-marca-azul/20 text-marca-azul-claro">
                       <p.icon className="h-6 w-6" />
                     </span>
-                    <div>
+                    <div className="text-left">
                       <h3 className="font-display text-2xl font-extrabold uppercase leading-tight text-marca-hueso">
                         {p.titulo}
                       </h3>
                       <p className="mt-2 max-w-sm text-marca-hueso/70">
                         {p.texto}
                       </p>
+                      {p.bullets && (
+                        <ul className="mt-3 max-w-sm space-y-2">
+                          {p.bullets.map((b) => (
+                            <li
+                              key={b}
+                              className="flex items-start gap-2 text-sm text-marca-hueso/70"
+                            >
+                              <span className="mt-1.5 h-1.5 w-1.5 flex-none rounded-full bg-marca-rojo" />
+                              {b}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   </div>
                 </motion.div>
