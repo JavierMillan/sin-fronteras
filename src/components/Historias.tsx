@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { BadgeCheck, Volume2, VolumeX, ChevronLeft, ChevronRight } from "lucide-react";
 import { TESTIMONIOS, CITAS, APROBACIONES, REENCUENTROS } from "@/data/casos";
 import { Reveal } from "./Reveal";
 import { cn } from "@/lib/utils";
 
 /**
- * ESPERANZA + PRUEBA — "Historias". Un testimonio protagonista a la vez, con
- * miniaturas al lado: cuatro videos corriendo en paralelo compiten entre sí y el
- * ojo no sabe dónde mirar.
+ * ESPERANZA + PRUEBA — "Historias". Un testimonio protagonista a la vez, que
+ * encadena con el siguiente al terminar, como una story: cuatro videos
+ * corriendo en paralelo compiten entre sí y el ojo no sabe dónde mirar.
+ *
+ * Los demás casos se listan por nombre, no como miniaturas: un vertical de
+ * teléfono es ilegible a 76px, y el nombre comunica cuántos hay igual de bien.
  *
  * Las fotos NO se emparejan con los videos: son personas distintas, y atarlas a
  * un testimonio concreto atribuía la hoja de aprobación de un señor mayor a una
@@ -27,14 +29,54 @@ export function Historias({ claro = false }: { claro?: boolean }) {
   // La cita es de quien está en pantalla: son personas reales.
   const cita = CITAS.find((c) => c.testimonioId === t.id);
 
-  // El ritmo lo marca el testimonio, no un temporizador.
+  // Avanza al terminar el clip, como una story: el ritmo lo marca el
+  // testimonio, no un temporizador.
+  // `avanzando` evita que el clip avance dos veces: `ended` y la red de
+  // seguridad de `onTimeUpdate` pueden dispararse casi a la vez y saltarse un
+  // testimonio. Se libera al montar el clip siguiente.
+  const avanzando = useRef(false);
+  const alTerminar = () => {
+    if (avanzando.current) return;
+    avanzando.current = true;
+    setActivo((i) => (i + 1) % total);
+  };
+
+  // Progreso real del clip: la barra del testimonio activo se llena conforme
+  // avanza el video, como en una story. Sin esto, las barras sólo dicen en cuál
+  // vas, no cuánto falta.
+  const [progreso, setProgreso] = useState(0);
+  const alAvanzar = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const v = e.currentTarget;
+    if (!v.duration) return;
+    setProgreso(v.currentTime / v.duration);
+    // Red de seguridad: algunos navegadores móviles se detienen en el último
+    // frame sin emitir `ended`, y la cadena se quedaría atorada ahí.
+    if (v.duration - v.currentTime < 0.25) alTerminar();
+  };
+
+  // Cambiar `src` sobre el mismo <video> no reinicia la reproducción por sí
+  // solo. Y no basta con llamar a play() tras load(): el clip aún no tiene
+  // datos, la promesa se rechaza y la cadena se queda pausada en 0:00. Hay que
+  // esperar a que haya buffer suficiente.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    const siguiente = () => setActivo((i) => (i + 1) % total);
-    v.addEventListener("ended", siguiente);
-    return () => v.removeEventListener("ended", siguiente);
-  }, [activo, total]);
+    setProgreso(0);
+
+    avanzando.current = false;
+
+    const arrancar = () => {
+      v.play().catch(() => {
+        /* Autoplay bloqueado (p. ej. con sonido activo): el usuario reanuda. */
+      });
+    };
+
+    v.load();
+    if (v.readyState >= 3) arrancar();
+    else v.addEventListener("canplay", arrancar, { once: true });
+
+    return () => v.removeEventListener("canplay", arrancar);
+  }, [activo]);
 
   const ir = (dir: 1 | -1) => setActivo((i) => (i + dir + total) % total);
 
@@ -95,22 +137,21 @@ export function Historias({ claro = false }: { claro?: boolean }) {
                   claro ? "shadow-2xl" : "border border-[var(--hairline)]"
                 )}
               >
-                <AnimatePresence mode="wait">
-                  <motion.video
-                    key={t.id}
-                    ref={videoRef}
-                    src={t.video}
-                    poster={t.poster}
-                    muted={!conSonido}
-                    playsInline
-                    autoPlay
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                </AnimatePresence>
+                {/* Un solo <video> que cambia de `src`, sin AnimatePresence: el
+                    crossfade con `mode="wait"` retenía el montaje del siguiente
+                    clip y la cadena se quedaba atorada en el primero. Una story
+                    corta entre clips, no disuelve. */}
+                <video
+                  ref={videoRef}
+                  src={t.video}
+                  poster={t.poster}
+                  muted={!conSonido}
+                  playsInline
+                  autoPlay
+                  onEnded={alTerminar}
+                  onTimeUpdate={alAvanzar}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
 
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
 
@@ -129,13 +170,14 @@ export function Historias({ claro = false }: { claro?: boolean }) {
 
                 <div className="absolute inset-x-4 top-16 flex gap-1.5">
                   {TESTIMONIOS.map((tt, i) => (
-                    <span
-                      key={tt.id}
-                      className={cn(
-                        "h-0.5 flex-1 rounded-full transition-colors",
-                        i === activo ? "bg-white" : "bg-white/30"
-                      )}
-                    />
+                    <span key={tt.id} className="h-0.5 flex-1 overflow-hidden rounded-full bg-white/30">
+                      <span
+                        className="block h-full rounded-full bg-white"
+                        style={{
+                          width: i < activo ? "100%" : i === activo ? `${progreso * 100}%` : "0%",
+                        }}
+                      />
+                    </span>
                   ))}
                 </div>
 
