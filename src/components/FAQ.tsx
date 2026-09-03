@@ -98,7 +98,7 @@ export function FAQ() {
     >
       <div className="relative mx-auto max-w-4xl">
         <Reveal>
-          <p className="eyebrow text-marca-rojo">¿Tienes alguna duda?</p>
+          <p className="eyebrow text-marca-rojo">Lo que casi nadie se atreve a preguntar</p>
           <h2 className="mt-4 max-w-2xl font-display text-[clamp(2.25rem,5vw,3.5rem)] font-extrabold uppercase leading-[0.95] text-marca-hueso">
             Es completamente normal.
           </h2>

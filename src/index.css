@@ -30,21 +30,14 @@
 
 /* Eyebrow firma de marca: hairline roja + texto (mov. #6). Reutilizable. */
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
+  display: inline-block;
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.22em;
 }
-.eyebrow::before {
-  content: "";
-  display: block;
-  width: 2.5rem;
-  height: 1px;
-  background: #d52b1e;
-}
+/* Sin filete: con la ceja en dos líneas el guion quedaba flotando suelto,
+   desalineado del texto. La jerarquía la da el tracking y el color. */
 
 /* Borde rasgado de papel — firma orgánica recurrente (mov. #3) */
 .torn {

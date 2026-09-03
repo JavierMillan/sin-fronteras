@@ -41,9 +41,6 @@ export function Acompanamiento() {
           {/* Texto principal — columna izquierda */}
           <Reveal className="md:col-span-6">
             <div>
-              <p className="eyebrow text-marca-tinta/60">
-                Acompañamiento presencial
-              </p>
               <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-extrabold uppercase leading-[0.92]">
                 No tienes que{" "}
                 <span className="text-marca-rojo">hacerlo solo.</span>

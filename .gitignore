@@ -9,3 +9,6 @@ dist-ssr
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Material original de WhatsApp (pesado, fuente de los clips ya procesados)
+Assets/dump/

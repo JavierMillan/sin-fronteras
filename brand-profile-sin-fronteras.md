@@ -74,10 +74,39 @@
 - Motion feel: eased y calmado (200-600ms, curva [0.22,1,0.36,1]); reveal-on-scroll; nunca bounce.
 
 ## 6. Imagery direction
-- Medium: **fotografía real** (gente mexicana auténtica) + video testimonial vertical.
-- Treatment: golden hour, cálida, emotiva; alto contraste fundido a la tinta con degradados; nunca stock corporativo frío, nunca pasaportes/sellos/maletas como protagonista (cliché muerto de la categoría).
-- Subject do: rostros, emoción (alivio/esperanza), reencuentro, miradas a ventana/horizonte. Don't: filas, embajadas, documentos flotando.
-- AI anchors: "cálido golden hour, gente real mexicana, emotivo, fundido a azul oscuro"; negative: "stock corporativo, pasaportes flotando, sellos, neón, glossy".
+
+Hay **dos registros** y no se tratan igual. Confundirlos fue el error de la
+versión anterior de esta sección, que pedía golden hour para todo cuando el
+material real de clientes es video de WhatsApp.
+
+### 6.a Material documental (prueba social real) — manda sobre 6.b
+- Medium: video testimonial vertical y foto de clientes reales, tal como llegan
+  (WhatsApp, teléfono, luz de mediodía, compresión visible).
+- Treatment: **ninguno**. No desaturar, no unificar tono, no filtro cálido, no
+  velar. La compresión y la luz dura son evidencia de que es gente real, no
+  producción. Un testimonio que parece anuncio deja de ser testimonio — y este
+  avatar ya fue defraudado una vez por algo que se veía muy profesional.
+- Escala: un vertical de teléfono es honesto a ~300px de ancho y patético a 90px.
+  **Nunca en miniatura**: ampliar la miniatura es lo que hace ver "caótica" una
+  sección de testimonios. Si hay que listar varios, se listan por nombre.
+- Color heredado: el amarillo de los subtítulos quemados y el de los letreros
+  pintados a mano del propio material son color de marca *encontrado*, no
+  elegido. Se pueden usar como hilo, y valen más que un acento inventado.
+- Subject do: rostros hablando a cámara, la hoja de aprobación en la mano,
+  reencuentros. Don't: recortar a la persona para "que quepa" en una retícula.
+
+### 6.b Imagery de campaña (generada o producida)
+- Medium: fotografía dirigida o imagen IA para anuncios y piezas de campaña.
+- Treatment: golden hour, cálida, emotiva; alto contraste fundido a la tinta con
+  degradados; nunca stock corporativo frío, nunca pasaportes/sellos/maletas como
+  protagonista (cliché muerto de la categoría).
+- Subject do: rostros, emoción (alivio/esperanza), reencuentro, miradas a
+  ventana/horizonte. Don't: filas, embajadas, documentos flotando.
+- AI anchors: "cálido golden hour, gente real mexicana, emotivo, fundido a azul
+  oscuro"; negative: "stock corporativo, pasaportes flotando, sellos, neón,
+  glossy".
+- **Nunca mezclar registros en la misma sección**: material documental tratado
+  como campaña se ve falso, y campaña presentada como testimonio es engaño.
 
 ## 7. Logo & assets
 - Lockups: logo completo (isotipo mundo+río+personas + "SIN/FRONTERAS/Visas y Pasaportes" + 3 estrellas). Isotipo solo (círculo azul). Versiones actuales son PNG con **fondo blanco** → no caen sobre oscuro.

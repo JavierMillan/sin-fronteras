@@ -19,12 +19,6 @@ export function Reencuadre() {
   return (
     <section className="paper-grain relative overflow-hidden bg-marca-papel px-6 py-28 text-marca-tinta md:px-10 md:py-36">
       <div className="mx-auto max-w-4xl text-center">
-        <Reveal>
-          <p className="eyebrow justify-center text-marca-tinta/60">
-            Nuestra forma de trabajar
-          </p>
-        </Reveal>
-
         {/* Frase central a tamaño cartel, voz manuscrita */}
         <Reveal delay={0.1}>
           <h2 className="mx-auto mt-8 max-w-3xl font-hand text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-[1.05] [text-wrap:balance]">

@@ -34,7 +34,7 @@ export function Cierre() {
       <div className="relative mx-auto max-w-6xl">
         {/* Titular sangrando a la izquierda, escala brutal */}
         <Reveal>
-          <p className="eyebrow text-marca-rojo">Da el primer paso</p>
+          <p className="eyebrow text-marca-rojo">Sin costo, sin compromiso</p>
           <h2 className="-ml-1 mt-5 max-w-4xl font-display text-[clamp(2.5rem,8vw,6rem)] font-extrabold uppercase leading-[0.85] text-marca-hueso">
             Que nada detenga{" "}
             <span className="text-marca-azul-claro">tus sueños.</span>
@@ -45,12 +45,17 @@ export function Cierre() {
             solo.
           </p>
 
+          {/* Va a WhatsApp, no a #diagnostico: quien llegó hasta aquí ya pasó
+              por el formulario. Mandarlo hacia arriba lo devuelve a una sección
+              que acaba de dejar atrás. */}
           <a
-            href="#diagnostico"
+            href="https://wa.me/523541060478"
+            target="_blank"
+            rel="noopener noreferrer"
             className="mt-8 inline-flex min-h-[44px] items-center gap-2 rounded-full bg-marca-rojo px-9 py-4 text-base font-bold text-white shadow-xl shadow-marca-rojo/25 transition hover:scale-[1.03]"
           >
             <MessageCircle className="h-5 w-5" />
-            Hacer mi pre-calificación gratis
+            Escríbenos por WhatsApp
           </a>
         </Reveal>
 

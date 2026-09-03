@@ -1,220 +1,288 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Play, Pause, ChevronLeft, ChevronRight, BadgeCheck } from "lucide-react";
-import { TESTIMONIOS } from "@/data/casos";
+import { BadgeCheck, Volume2, VolumeX, ChevronLeft, ChevronRight } from "lucide-react";
+import { TESTIMONIOS, CITAS, APROBACIONES, REENCUENTROS } from "@/data/casos";
 import { Reveal } from "./Reveal";
 import { cn } from "@/lib/utils";
 
 /**
- * ESPERANZA + PRUEBA — "Historias". Composición asimétrica (no split 50/50):
- * el teléfono INVADE desde la derecha-abajo cortado por el borde (bleed), el
- * texto se ancla arriba-izquierda. El teléfono tiene CUERPO 3D real: marco
- * grueso, frame, botones laterales, notch y profundidad por capas (translateZ).
+ * ESPERANZA + PRUEBA — "Historias". Un testimonio protagonista a la vez, con
+ * miniaturas al lado: cuatro videos corriendo en paralelo compiten entre sí y el
+ * ojo no sabe dónde mirar.
+ *
+ * Las fotos NO se emparejan con los videos: son personas distintas, y atarlas a
+ * un testimonio concreto atribuía la hoja de aprobación de un señor mayor a una
+ * clienta joven. Viven como galería —un muro donde el patrón (la misma hoja
+ * verde en manos distintas) *es* el mensaje— y no como prueba de un caso.
+ *
+ * El material no se trata: la compresión de WhatsApp y la luz dura son evidencia
+ * de que es gente real (ver §6.a del brand profile).
  */
-export function Historias() {
+export function Historias({ claro = false }: { claro?: boolean }) {
   const [activo, setActivo] = useState(0);
-  const [pausado, setPausado] = useState(false);
+  const [conSonido, setConSonido] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const total = TESTIMONIOS.length;
   const t = TESTIMONIOS[activo];
+  // La cita es de quien está en pantalla: son personas reales.
+  const cita = CITAS.find((c) => c.testimonioId === t.id);
 
+  // El ritmo lo marca el testimonio, no un temporizador.
   useEffect(() => {
-    if (pausado) return;
-    const id = setTimeout(() => setActivo((i) => (i + 1) % total), 8000);
-    return () => clearTimeout(id);
-  }, [activo, pausado, total]);
+    const v = videoRef.current;
+    if (!v) return;
+    const siguiente = () => setActivo((i) => (i + 1) % total);
+    v.addEventListener("ended", siguiente);
+    return () => v.removeEventListener("ended", siguiente);
+  }, [activo, total]);
 
   const ir = (dir: 1 | -1) => setActivo((i) => (i + dir + total) % total);
+
+  const btnNav = claro
+    ? "border-marca-tinta/20 text-marca-tinta hover:bg-marca-tinta/10"
+    : "border-[var(--hairline)] text-marca-hueso hover:bg-marca-hueso/10";
+  const rotulo = claro ? "text-marca-tinta/50" : "text-marca-hueso/50";
+
+  // Galería: la primera pieza manda, el resto la acompaña. Rompe la retícula
+  // de cuatro iguales que hacía ver la sección como un mosaico monótono.
+  const galeria = [...APROBACIONES, ...REENCUENTROS];
 
   return (
     <section
       id="historias"
-      className="grain relative scroll-mt-20 overflow-hidden bg-marca-tinta-2 px-6 py-24 md:px-10 md:py-32"
+      className={cn(
+        "grain relative scroll-mt-20 overflow-hidden px-6 py-24 md:px-10 md:py-32",
+        claro ? "bg-marca-hueso" : "bg-marca-tinta-2"
+      )}
     >
-      {/* Río de luz diagonal cruzando la sección (conecta con el resto) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-60"
+        className={cn("pointer-events-none absolute inset-0", claro ? "opacity-20" : "opacity-60")}
         style={{ backgroundImage: "var(--rio-luz)" }}
       />
 
-      <div className="relative mx-auto grid max-w-6xl gap-y-12 md:grid-cols-12 md:items-center">
-        {/* Texto — tercio superior-izquierdo */}
-        <div className="md:col-span-6 lg:col-span-5">
-          <Reveal>
-            <p className="eyebrow text-marca-rojo">Casos de éxito</p>
-            <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.5rem)] font-extrabold uppercase leading-[0.92] text-marca-hueso">
+      <div className="relative mx-auto max-w-6xl">
+        <Reveal>
+          <div className="max-w-2xl">
+            <h2
+              className={cn(
+                "font-display text-[clamp(2.25rem,5vw,3.5rem)] font-extrabold uppercase leading-[0.92]",
+                claro ? "text-marca-tinta" : "text-marca-hueso"
+              )}
+            >
               Estas son algunas
               <span className="block text-marca-azul-claro">de sus historias.</span>
             </h2>
-            <p className="mt-6 max-w-md text-lg leading-relaxed text-marca-hueso/75">
+            <p
+              className={cn(
+                "mt-6 max-w-md text-lg leading-relaxed",
+                claro ? "text-marca-tinta/75" : "text-marca-hueso/75"
+              )}
+            >
               Gente como tú, que también tenía miedo de que le dijeran que no.
               A varios ya les habían negado la visa antes. Mira cómo les fue.
             </p>
-            <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--hairline)] bg-marca-tinta/40 px-4 py-2 text-sm text-marca-hueso/70">
-              <span className="text-base">🤝</span>
-              Muchos llegaron por recomendación de familiares en EE.UU.
-            </p>
+          </div>
+        </Reveal>
 
-            <div className="mt-8 flex items-center gap-4">
-              <button
-                onClick={() => ir(-1)}
-                aria-label="Testimonio anterior"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--hairline)] text-marca-hueso transition hover:bg-marca-hueso/10"
+        <div className="mt-12 grid gap-10 lg:grid-cols-12 lg:items-start">
+          {/* Testimonio protagonista */}
+          <Reveal delay={0.1} className="lg:col-span-7">
+            <div>
+              <div
+                className={cn(
+                  "relative mx-auto aspect-[9/16] w-full max-w-[340px] overflow-hidden rounded-3xl bg-black lg:max-w-[380px]",
+                  claro ? "shadow-2xl" : "border border-[var(--hairline)]"
+                )}
               >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => ir(1)}
-                aria-label="Siguiente testimonio"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--hairline)] text-marca-hueso transition hover:bg-marca-hueso/10"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-              <span className="ml-1 text-sm text-marca-hueso/55">
-                {activo + 1} / {total}
-              </span>
+                <AnimatePresence mode="wait">
+                  <motion.video
+                    key={t.id}
+                    ref={videoRef}
+                    src={t.video}
+                    poster={t.poster}
+                    muted={!conSonido}
+                    playsInline
+                    autoPlay
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                </AnimatePresence>
+
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+
+                <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-marca-azul/90 px-3 py-1.5 text-xs font-bold text-white backdrop-blur">
+                  <BadgeCheck className="h-3.5 w-3.5" />
+                  {t.resultado}
+                </span>
+
+                <button
+                  onClick={() => setConSonido((v) => !v)}
+                  aria-label={conSonido ? "Silenciar testimonio" : "Escuchar testimonio"}
+                  className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
+                >
+                  {conSonido ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                </button>
+
+                <div className="absolute inset-x-4 top-16 flex gap-1.5">
+                  {TESTIMONIOS.map((tt, i) => (
+                    <span
+                      key={tt.id}
+                      className={cn(
+                        "h-0.5 flex-1 rounded-full transition-colors",
+                        i === activo ? "bg-white" : "bg-white/30"
+                      )}
+                    />
+                  ))}
+                </div>
+
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <p className="text-sm font-semibold text-white">
+                    {t.nombre} <span className="font-normal text-white/60">· {t.lugar}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 flex items-center justify-center gap-4">
+                <button
+                  onClick={() => ir(-1)}
+                  aria-label="Testimonio anterior"
+                  className={cn("flex h-10 w-10 items-center justify-center rounded-full border transition", btnNav)}
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <span className={cn("text-sm", claro ? "text-marca-tinta/55" : "text-marca-hueso/55")}>
+                  {activo + 1} / {total}
+                </span>
+                <button
+                  onClick={() => ir(1)}
+                  aria-label="Siguiente testimonio"
+                  className={cn("flex h-10 w-10 items-center justify-center rounded-full border transition", btnNav)}
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
             </div>
           </Reveal>
-        </div>
 
-        {/* Teléfono — invade desde la derecha, rotado en perspectiva */}
-        <div
-          className="flex justify-center md:col-span-6 md:col-start-7 md:justify-end"
-          style={{ perspective: "1600px" }}
-        >
-          <Reveal delay={0.15}>
-            <div className="relative w-[min(280px,72vw)]">
-              {/* Sombra proyectada al piso */}
-              <div
-                aria-hidden
-                className="absolute -bottom-8 left-1/2 -z-10 h-12 w-4/5 -translate-x-1/2 rounded-[50%] bg-black/60 blur-2xl"
-              />
-
-              {/* Chasis del teléfono con cuerpo 3D real */}
-              <motion.div
-                initial={{ rotateY: -16, rotateX: 6 }}
-                whileInView={{ rotateY: -13, rotateX: 4 }}
-                whileHover={{ rotateY: 0, rotateX: 0, scale: 1.02 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="relative aspect-[9/19.5] rounded-[2.8rem] bg-gradient-to-br from-[#2a2d36] via-[#15171d] to-[#0a0b0f] p-[3px] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.85)]"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                {/* Borde de luz (canto metálico) */}
-                <div className="absolute inset-0 rounded-[2.8rem] ring-1 ring-white/10" />
-
-                {/* Botones laterales (volumen + power) — dan grosor real */}
-                <span className="absolute -left-[3px] top-[22%] h-12 w-[3px] rounded-l bg-[#0a0b0f]" />
-                <span className="absolute -left-[3px] top-[36%] h-16 w-[3px] rounded-l bg-[#0a0b0f]" />
-                <span className="absolute -right-[3px] top-[28%] h-20 w-[3px] rounded-r bg-[#0a0b0f]" />
-
-                {/* Bisel interior negro */}
-                <div className="relative h-full w-full overflow-hidden rounded-[2.55rem] bg-black p-[6px]">
-                  {/* Pantalla */}
-                  <div className="relative h-full w-full overflow-hidden rounded-[2.1rem] bg-black">
-                    {/* Notch / isla dinámica */}
-                    <div className="absolute left-1/2 top-2 z-20 h-5 w-20 -translate-x-1/2 rounded-full bg-black ring-1 ring-white/5" />
-
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={t.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.35 }}
-                        className="absolute inset-0"
-                      >
-                        {t.video ? (
-                          <video
-                            ref={videoRef}
-                            src={t.video}
-                            poster={t.poster}
-                            muted
-                            playsInline
-                            autoPlay
-                            loop
-                            className="h-full w-full object-cover"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLVideoElement).style.display = "none";
-                            }}
-                          />
-                        ) : (
-                          <img
-                            src={t.poster}
-                            alt={`Testimonio de ${t.nombre}`}
-                            className="h-full w-full object-cover"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).style.opacity = "0";
-                            }}
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/35" />
-
-                        {/* Badge resultado */}
-                        <div className="absolute left-3 top-9 inline-flex items-center gap-1.5 rounded-full bg-marca-azul/90 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur">
-                          <BadgeCheck className="h-3 w-3" />
-                          {t.resultado}
-                        </div>
-
-                        {/* Cita + nombre */}
-                        <div className="absolute inset-x-0 bottom-0 p-4">
-                          <p className="font-hand text-lg font-bold leading-snug text-white">
-                            “{t.cita}”
-                          </p>
-                          <p className="mt-1.5 text-xs font-semibold text-white/90">
-                            {t.nombre}{" "}
-                            <span className="font-normal text-white/50">· {t.lugar}</span>
-                          </p>
-                        </div>
-                      </motion.div>
-                    </AnimatePresence>
-
-                    {/* Barras de progreso tipo stories */}
-                    <div className="absolute inset-x-3 top-8 z-10 flex gap-1.5">
-                      {TESTIMONIOS.map((tt, i) => (
-                        <span
-                          key={tt.id}
-                          className="h-0.5 flex-1 overflow-hidden rounded-full bg-white/25"
-                        >
-                          <motion.span
-                            className="block h-full bg-white"
-                            initial={{ width: i < activo ? "100%" : "0%" }}
-                            animate={{
-                              width:
-                                i < activo
-                                  ? "100%"
-                                  : i === activo && !pausado
-                                  ? "100%"
-                                  : i === activo
-                                  ? "30%"
-                                  : "0%",
-                            }}
-                            transition={{
-                              duration: i === activo && !pausado ? 8 : 0.3,
-                              ease: "linear",
-                            }}
-                          />
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Play/pausa */}
+          {/* Miniaturas y cita */}
+          <Reveal delay={0.2} className="lg:col-span-5">
+            <div className="flex flex-col gap-8">
+              {/* Lista de nombres, no miniaturas: un vertical de teléfono es
+                  ilegible a 76px, y ampliarlo solo hace ver la compresión. El
+                  nombre comunica cuántos casos hay mejor que un thumbnail. */}
+              <div>
+                <p className={cn("text-xs font-bold uppercase tracking-wide", rotulo)}>
+                  Más historias
+                </p>
+                <div className={cn("mt-3 border-t", claro ? "border-[var(--hairline-tinta)]" : "border-[var(--hairline)]")}>
+                  {TESTIMONIOS.map((tt, i) => (
                     <button
-                      onClick={() => setPausado((p) => !p)}
-                      aria-label={pausado ? "Reanudar" : "Pausar"}
+                      key={tt.id}
+                      onClick={() => setActivo(i)}
+                      aria-current={i === activo}
                       className={cn(
-                        "absolute bottom-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition hover:bg-black/70"
+                        "flex w-full items-baseline gap-3 border-b py-3 text-left transition-opacity",
+                        claro ? "border-[var(--hairline-tinta)]" : "border-[var(--hairline)]",
+                        i === activo ? "opacity-100" : "opacity-45 hover:opacity-80"
                       )}
                     >
-                      {pausado ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
+                      <span
+                        className={cn(
+                          "font-display text-base font-extrabold uppercase leading-none tracking-tight",
+                          claro ? "text-marca-tinta" : "text-marca-hueso"
+                        )}
+                      >
+                        {tt.nombre}
+                      </span>
+                      <span className={cn("ml-auto text-[0.6875rem] font-semibold uppercase tracking-[0.14em]", rotulo)}>
+                        {tt.resultado}
+                      </span>
                     </button>
-                  </div>
+                  ))}
                 </div>
-              </motion.div>
+              </div>
+
+              {cita && (
+                <figure
+                  className={cn(
+                    "rounded-2xl p-6",
+                    claro
+                      ? "bg-marca-tinta text-marca-hueso"
+                      : "border border-[var(--hairline)] bg-marca-tinta/60 text-marca-hueso"
+                  )}
+                >
+                  <blockquote className="font-hand text-xl font-bold leading-snug">
+                    “{cita.texto}”
+                  </blockquote>
+                  <figcaption className="mt-4 text-xs font-semibold opacity-80">
+                    {cita.autor} <span className="font-normal opacity-60">· {cita.lugar}</span>
+                  </figcaption>
+                </figure>
+              )}
             </div>
           </Reveal>
         </div>
+
+        {/* Galería: el patrón es el mensaje — la misma hoja verde en manos
+            distintas, y para qué sirvió. Alturas desiguales para que no se lea
+            como otra retícula de cuatro. */}
+        <Reveal delay={0.15}>
+          <div className="mt-16">
+            <p className={cn("text-xs font-bold uppercase tracking-wide", rotulo)}>
+              Aprobaciones y reencuentros
+            </p>
+            {/* Móvil: tira horizontal con snap — apiladas en columnas añadían
+                ~1.5 pantallas de scroll. Desktop: mosaico de alturas alternas. */}
+            <div
+              className={cn(
+                "mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3",
+                "sm:block sm:columns-3 sm:overflow-visible lg:columns-4 sm:[&>*]:mb-3"
+              )}
+            >
+              {galeria.map((g, i) => (
+                <img
+                  key={`${g.id}-${i}`}
+                  src={g.foto}
+                  alt={g.alt}
+                  loading="lazy"
+                  className={cn(
+                    "h-[240px] w-auto shrink-0 snap-start rounded-xl object-cover",
+                    "sm:h-auto sm:w-full sm:break-inside-avoid",
+                    // Alturas alternas solo en desktop: rompe el mosaico regular.
+                    i % 3 === 0 ? "sm:aspect-[4/5]" : i % 3 === 1 ? "sm:aspect-[3/4]" : "sm:aspect-square"
+                  )}
+                />
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* CTA en el punto de máxima intención: quien acaba de ver a alguien
+            como él aprobado es quien más cerca está de intentarlo. Antes había
+            que bajar siete pantallas más para encontrar dónde tocar. */}
+        <Reveal delay={0.1}>
+          <div
+            className={cn(
+              "mt-14 flex flex-col items-start gap-4 border-t pt-8 sm:flex-row sm:items-center sm:justify-between",
+              claro ? "border-[var(--hairline-tinta)]" : "border-[var(--hairline)]"
+            )}
+          >
+            <p className={cn("max-w-md text-lg", claro ? "text-marca-tinta/80" : "text-marca-hueso/80")}>
+              ¿Tu caso se parece al de alguno de ellos?
+            </p>
+            <a
+              href="#diagnostico"
+              className="inline-flex min-h-[44px] shrink-0 items-center gap-2 rounded-full bg-marca-rojo px-7 py-3.5 text-base font-bold text-white transition hover:scale-[1.03]"
+            >
+              Ver si califico
+              <span className="text-sm font-normal opacity-80">· 2 min, gratis</span>
+            </a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

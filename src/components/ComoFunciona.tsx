@@ -46,7 +46,6 @@ export function ComoFunciona() {
       <div className="mx-auto max-w-5xl">
         {/* Encabezado anclado a la izquierda, no centrado */}
         <Reveal>
-          <p className="eyebrow text-marca-rojo">Cómo funciona</p>
           <h2 className="mt-4 max-w-2xl font-display text-[clamp(2.25rem,5vw,3.5rem)] font-extrabold uppercase leading-[0.95] text-marca-hueso">
             Tres pasos, cero enredos.
           </h2>

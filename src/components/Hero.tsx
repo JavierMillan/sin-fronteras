@@ -99,7 +99,7 @@ export function Hero() {
                 className="group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-marca-rojo px-8 py-4 text-base font-bold text-white shadow-xl shadow-marca-rojo/25 transition hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-hueso"
               >
                 <MessageCircle className="h-5 w-5" />
-                Hacer mi pre-calificación
+                Ver si califico
               </a>
               <span className="text-sm text-marca-hueso/55">
                 Gratis · sin compromiso

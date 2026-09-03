@@ -70,11 +70,15 @@ export function Navbar() {
         {/* CTA */}
         <a
           href="#diagnostico"
-          className="inline-flex items-center gap-1.5 rounded-full bg-marca-rojo px-4 py-2 text-sm font-bold text-white transition hover:scale-[1.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-hueso"
+          className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-marca-rojo px-4 py-2 text-sm font-bold text-white transition hover:scale-[1.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-hueso"
         >
           <MessageCircle className="h-4 w-4" />
-          <span className="hidden sm:inline">Pre-calificación gratis</span>
-          <span className="sm:hidden">Pre-calificar</span>
+          {/* "Pre-calificación" es jerga del trámite: nombra el proceso, no lo
+              que la persona quiere saber. Su duda real es "¿me la van a dar?".
+              En móvil se acorta: a 375px el texto largo parte el botón en dos
+              líneas y empuja el logo. */}
+          <span className="hidden sm:inline">Ver si califico · gratis</span>
+          <span className="sm:hidden">¿Califico?</span>
         </a>
       </div>
     </motion.nav>
