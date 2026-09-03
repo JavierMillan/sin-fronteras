@@ -130,10 +130,38 @@ export function Historias({ claro = false }: { claro?: boolean }) {
         <div className="mt-12 grid gap-10 lg:grid-cols-12 lg:items-start">
           {/* Testimonio protagonista */}
           <Reveal delay={0.1} className="lg:col-span-7">
-            <div>
+            {/* Las flechas viven a los lados del video, no debajo: el contador
+                "2 / 4" sobraba porque las barras de progreso ya dicen en cuál
+                vas y cuánto falta. */}
+            <div className="relative mx-auto w-full max-w-[340px] lg:max-w-[380px]">
+              <button
+                onClick={() => ir(-1)}
+                aria-label="Testimonio anterior"
+                className={cn(
+                  "absolute bottom-16 left-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur transition",
+                  "sm:-left-14 sm:bottom-auto sm:top-1/2 sm:h-10 sm:w-10 sm:-translate-y-1/2",
+                  claro ? "border-marca-tinta/15 bg-marca-hueso/80" : "border-[var(--hairline)] bg-marca-tinta/70",
+                  btnNav
+                )}
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => ir(1)}
+                aria-label="Siguiente testimonio"
+                className={cn(
+                  "absolute bottom-16 right-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur transition",
+                  "sm:-right-14 sm:bottom-auto sm:top-1/2 sm:h-10 sm:w-10 sm:-translate-y-1/2",
+                  claro ? "border-marca-tinta/15 bg-marca-hueso/80" : "border-[var(--hairline)] bg-marca-tinta/70",
+                  btnNav
+                )}
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
               <div
                 className={cn(
-                  "relative mx-auto aspect-[9/16] w-full max-w-[340px] overflow-hidden rounded-3xl bg-black lg:max-w-[380px]",
+                  "relative aspect-[9/16] w-full overflow-hidden rounded-3xl bg-black",
                   claro ? "shadow-2xl" : "border border-[var(--hairline)]"
                 )}
               >
@@ -188,25 +216,6 @@ export function Historias({ claro = false }: { claro?: boolean }) {
                 </div>
               </div>
 
-              <div className="mt-5 flex items-center justify-center gap-4">
-                <button
-                  onClick={() => ir(-1)}
-                  aria-label="Testimonio anterior"
-                  className={cn("flex h-10 w-10 items-center justify-center rounded-full border transition", btnNav)}
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-                <span className={cn("text-sm", claro ? "text-marca-tinta/55" : "text-marca-hueso/55")}>
-                  {activo + 1} / {total}
-                </span>
-                <button
-                  onClick={() => ir(1)}
-                  aria-label="Siguiente testimonio"
-                  className={cn("flex h-10 w-10 items-center justify-center rounded-full border transition", btnNav)}
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              </div>
             </div>
           </Reveal>
 
