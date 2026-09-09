@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, MessageCircle, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, MessageCircle, Check, AlertTriangle } from "lucide-react";
 import { cn, construirLinkWhatsApp } from "@/lib/utils";
 import { Reveal } from "./Reveal";
 
@@ -25,6 +25,7 @@ interface Paso {
 
 interface Respuestas {
   visa: string;
+  oferta: string;
   pais: string;
   historial: string;
   cuando: string;
@@ -37,6 +38,7 @@ interface Respuestas {
 
 const RESPUESTAS_INICIALES: Respuestas = {
   visa: "",
+  oferta: "",
   pais: "",
   historial: "",
   cuando: "",
@@ -62,6 +64,17 @@ function construirPasos(r: Respuestas): Paso[] {
         { valor: "Estudiante", etiqueta: "Visa de estudiante" },
         { valor: "Trabajo", etiqueta: "Visa de trabajo" },
         { valor: "No estoy seguro", etiqueta: "Aún no estoy seguro" },
+      ],
+    },
+    {
+      id: "oferta",
+      pregunta: "¿Ya cuentas con una propuesta de trabajo?",
+      ayuda: "Una oferta formal de un empleador en el país al que quieres ir.",
+      tipo: "opciones",
+      opciones: [
+        { valor: "Sí, ya tengo oferta", etiqueta: "Sí, ya tengo una oferta" },
+        { valor: "Está en proceso", etiqueta: "Está en proceso / en pláticas" },
+        { valor: "Todavía no tengo oferta", etiqueta: "No, todavía no" },
       ],
     },
     {
@@ -145,11 +158,15 @@ function construirPasos(r: Respuestas): Paso[] {
     },
   ];
 
+  // La propuesta de trabajo solo aplica a visa de trabajo.
+  let resultado =
+    r.visa === "Trabajo" ? pasos : pasos.filter((p) => p.id !== "oferta");
+
   // Ramificación: si "no estoy seguro" del tipo, saltar el historial específico.
   if (r.visa === "No estoy seguro") {
-    return pasos.filter((p) => p.id !== "historial");
+    resultado = resultado.filter((p) => p.id !== "historial");
   }
-  return pasos;
+  return resultado;
 }
 
 export function FormularioPrecalificacion() {
@@ -161,6 +178,10 @@ export function FormularioPrecalificacion() {
   const actual = pasos[Math.min(indice, pasos.length - 1)];
   const valorActual = respuestas[actual.id];
   const esUltimo = indice === pasos.length - 1;
+  // La visa de trabajo exige una oferta formal de un empleador.
+  const faltaOferta = respuestas.oferta === "Todavía no tengo oferta";
+  // Aviso duro, solo mientras están parados en esa pregunta.
+  const sinOferta = actual.id === "oferta" && faltaOferta;
   const progreso = ((indice + (valorActual ? 1 : 0)) / pasos.length) * 100;
 
   const valido = useMemo(
@@ -169,7 +190,12 @@ export function FormularioPrecalificacion() {
   );
 
   const setValor = (valor: string) =>
-    setRespuestas((r) => ({ ...r, [actual.id]: valor }));
+    setRespuestas((r) => {
+      const siguiente = { ...r, [actual.id]: valor };
+      // Si deja de ser visa de trabajo, la propuesta ya no aplica.
+      if (actual.id === "visa" && valor !== "Trabajo") siguiente.oferta = "";
+      return siguiente;
+    });
 
   const avanzar = () => {
     if (!valido) return;
@@ -181,11 +207,16 @@ export function FormularioPrecalificacion() {
 
   const finalizar = () => {
     const r = respuestas;
+    // Sin oferta de trabajo no procede la cita de pago: el lead pide orientación.
+    const pideOrientacion = r.oferta === "Todavía no tengo oferta";
     const mensaje = [
-      "¡Hola SIN FRONTERAS! Hice mi pre-calificación en la página y quiero agendar mi cita de valoración:",
+      pideOrientacion
+        ? "¡Hola SIN FRONTERAS! Hice mi pre-calificación en la página y quiero orientación:"
+        : "¡Hola SIN FRONTERAS! Hice mi pre-calificación en la página y quiero agendar mi cita de valoración:",
       "",
       `• Nombre: ${r.nombre}`,
       `• Visa: ${r.visa}${r.pais ? ` (${r.pais})` : ""}`,
+      r.oferta ? `• Propuesta de trabajo: ${r.oferta}` : null,
       r.historial ? `• Historial: ${r.historial}` : null,
       `• Viajo: ${r.cuando}`,
       `• Personas: ${r.personas}`,
@@ -193,7 +224,9 @@ export function FormularioPrecalificacion() {
       `• Desde: ${r.pais_residencia}`,
       `• Horario preferido: ${r.horario}`,
       "",
-      "Entiendo que la cita de valoración tiene un costo y quiero agendarla.",
+      pideOrientacion
+        ? "Sé que aún no tengo una oferta de trabajo y quiero orientación sobre cómo conseguirla."
+        : "Entiendo que la cita de valoración tiene un costo y quiero agendarla.",
     ]
       .filter(Boolean)
       .join("\n");
@@ -305,13 +338,56 @@ export function FormularioPrecalificacion() {
                   </motion.div>
                 </AnimatePresence>
 
+                {/* Sin oferta de trabajo: la visa de trabajo no procede así */}
+                <AnimatePresence>
+                  {sinOferta && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mt-6 rounded-xl border border-marca-rojo/40 bg-marca-rojo/10 px-5 py-4">
+                        <p className="flex items-start gap-2 text-sm font-bold uppercase tracking-wide text-marca-rojo">
+                          <AlertTriangle className="h-4 w-4 flex-none translate-y-0.5" />
+                          Un momento antes de seguir
+                        </p>
+                        <p className="mt-2 text-sm leading-relaxed text-marca-hueso/80">
+                          Para una <strong className="text-marca-hueso">visa de trabajo</strong>{" "}
+                          se requiere una oferta formal de un empleador en el
+                          país de destino. Sin ella, el consulado no puede
+                          otorgarla y no tendría caso cobrarte una valoración
+                          para eso.
+                        </p>
+                        <p className="mt-2 text-sm leading-relaxed text-marca-hueso/80">
+                          Si quieres, regresa y elige{" "}
+                          <strong className="text-marca-hueso">visa de turista</strong> o{" "}
+                          <strong className="text-marca-hueso">aún no estoy seguro</strong>: ahí
+                          sí podemos ayudarte hoy. O sigue y te orientamos sobre
+                          cómo conseguir esa oferta.
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* Nota de cita de pago — visible en el último paso */}
-                {esUltimo && (
+                {esUltimo && !faltaOferta && (
                   <p className="mt-6 rounded-xl border border-marca-hueso/10 bg-marca-tinta/60 px-4 py-3 text-sm text-marca-hueso/70">
                     La <strong className="text-marca-hueso">cita de valoración</strong>{" "}
                     tiene un costo de <strong className="text-marca-hueso">$500 MXN / $20 USD</strong>,{" "}
                     <strong className="text-marca-hueso">acreditable a tu trámite</strong> si
                     decides continuar. Así dedicamos tiempo real a tu caso.
+                  </p>
+                )}
+
+                {esUltimo && faltaOferta && (
+                  <p className="mt-6 rounded-xl border border-marca-hueso/10 bg-marca-tinta/60 px-4 py-3 text-sm text-marca-hueso/70">
+                    Como todavía no tienes una oferta de trabajo,{" "}
+                    <strong className="text-marca-hueso">esta primera plática no tiene costo</strong>.
+                    Te decimos qué opciones tienes y qué necesitarías para
+                    llegar a una visa de trabajo.
                   </p>
                 )}
 
@@ -340,7 +416,9 @@ export function FormularioPrecalificacion() {
                     {esUltimo ? (
                       <>
                         <MessageCircle className="h-5 w-5" />
-                        Agendar mi cita de valoración
+                        {faltaOferta
+                          ? "Quiero que me orienten"
+                          : "Agendar mi cita de valoración"}
                       </>
                     ) : (
                       <>
@@ -362,8 +440,10 @@ export function FormularioPrecalificacion() {
                 </h3>
                 <p className="mx-auto mt-3 max-w-sm text-marca-hueso/75">
                   Se abrió WhatsApp con tus datos. Solo presiona{" "}
-                  <strong className="text-marca-hueso">enviar</strong> y
-                  coordinamos tu cita de valoración.
+                  <strong className="text-marca-hueso">enviar</strong> y{" "}
+                  {faltaOferta
+                    ? "te orientamos sobre tus opciones."
+                    : "coordinamos tu cita de valoración."}
                 </p>
                 <button
                   onClick={finalizar}
