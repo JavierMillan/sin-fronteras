@@ -1,7 +1,8 @@
 import { Reveal } from "./Reveal";
-import { MessageCircle, Phone, MapPin } from "lucide-react";
+import { MessageCircle, Phone, Mail, MapPin } from "lucide-react";
 import {
   construirLinkWhatsApp,
+  CORREO_CONTACTO,
   WHATSAPP_VISIBLE,
   TELEFONO_VISIBLE,
 } from "@/lib/utils";
@@ -87,6 +88,19 @@ export function Cierre() {
                   Llámanos
                 </span>
                 <span className="text-lg font-bold tabular">{TELEFONO_VISIBLE}</span>
+              </span>
+            </a>
+
+            <a
+              href={`mailto:${CORREO_CONTACTO}`}
+              className="flex items-center gap-3 text-marca-hueso transition hover:text-marca-azul-claro"
+            >
+              <Mail className="h-6 w-6 shrink-0 text-marca-azul-claro" />
+              <span>
+                <span className="block text-xs uppercase tracking-wider text-marca-hueso/50">
+                  Escríbenos por correo
+                </span>
+                <span className="break-all text-lg font-bold">{CORREO_CONTACTO}</span>
               </span>
             </a>
 

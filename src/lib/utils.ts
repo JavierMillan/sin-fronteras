@@ -10,6 +10,8 @@ export const WHATSAPP_NUMERO = "523541060478";
 /** Teléfono para llamadas, formato visible. */
 export const TELEFONO_VISIBLE = "354 112 0758";
 export const WHATSAPP_VISIBLE = "354 106 0478";
+/** Correo de contacto del negocio. */
+export const CORREO_CONTACTO = "sinfronterasvisasp@gmail.com";
 
 /**
  * Construye el deep link de WhatsApp con un mensaje pre-llenado.
